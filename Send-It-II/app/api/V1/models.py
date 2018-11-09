@@ -1,11 +1,12 @@
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User (object):
     user_list = []
 
-    def __init__(self, user_id, username, email, phone, password):
-        self.user_id = user_id
+    def __init__(self, username, email, phone, password):
+        self.user_id = len(User.user_list) + 1
         self.username = username
         self.email = email
         self.phone = phone
@@ -47,7 +48,8 @@ class User (object):
         return {'user_id':self.user_id,
                 'username': self.username,
                 'email':self.email,
-                'phone':self.phone
+                'phone':self.phone,
+                'password_hash':self.password_hash
                 }
 
     def check_password(self, password):
@@ -66,7 +68,9 @@ class Parcel (object):
         self.recipient_name = recipient_name
         self.recipient_phone = recipient_phone
         self.recipient_location = recipient_location
-        self.status = ""
+        self.status = "dispatched",
+        self.date = datetime.now()
+
 
     def changeStatus(self, new_status):
         self.status = new_status
@@ -107,12 +111,13 @@ class Parcel (object):
         return parcel
 
     def __repr__(self):
-        return {'parcel_id':self.parcel_id_id,
+        return {'parcel_id':self.parcel_id,
                 'sender_name': self.sender_name,
                 'sender_phone':self.sender_phone,
                 'sender_location':self.sender_location,
                 'recipient_name':self.recipient_name,
                 'recipient_phone':self.recipient_phone,
                 'recipient_location':self.recipient_location,
-                'parcel_status':self.status
+                'parcel_status':self.status,
+                'date':str(self.date)
                 }
