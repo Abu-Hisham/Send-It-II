@@ -6,5 +6,4 @@ def create_app(config_name):
     app = Flask(__name__,instance_path='/app/instance/' )
     app.config.from_object(app_config[config_name])
     app.register_blueprint(bp)
-    # app.config.from_pyfile('../instance/config.py')
     return app
