@@ -96,6 +96,14 @@ class Parcel (object):
                 return parcel
         return None
 
+    @staticmethod
+    def get_user_parcels(user_phone):
+        user_parcels = []
+        for parcel in Parcel.parcel_list:
+            if parcel.sender_phone == user_phone:
+                user_parcels.append(parcel)
+        return user_parcels
+
     def __eq__(self, other):
         return self.email == other.email
 
