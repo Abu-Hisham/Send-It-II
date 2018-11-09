@@ -5,7 +5,7 @@ python:
 #Install Dependencies
 install:
   - pip install -r requirements.txt
-  - pip install -coveralls
+  - pip install coveralls
   - pip install codeclimate-test-reporter
 
 script:
