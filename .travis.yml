@@ -1,0 +1,18 @@
+language: python
+python:
+  - "3.6"
+
+#Install Dependencies
+install:
+  - pip install -r requirements.txt
+  - pip install -coveralls
+  - pip install codeclimate-test-reporter
+
+script:
+  - nosetests --exe -v
+  - nosetests --exe --with-coverage --cover-package=app
+  - coveralls
+
+after_success:
+  - coveralls
+  - codeclimate-test-reporter
