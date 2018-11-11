@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Abu-Hisham/Send-It-II.svg?branch=master)](https://travis-ci.org/Abu-Hisham/Send-It-II)
+[![Build Status](https://travis-ci.org/Abu-Hisham/Send-It-II.svg?branch=develop)](https://travis-ci.org/Abu-Hisham/Send-It-II)
 
 [![Coverage Status](https://coveralls.io/repos/github/Abu-Hisham/Send-It-II/badge.svg?branch=develop)](https://coveralls.io/github/Abu-Hisham/Send-It-II?branch=develop)
 
@@ -61,3 +61,7 @@ https://dzone.com/articles/restful-web-services-with-python-flask
    ```
    flask run
    ```
+
+
+Available endpoints
+
