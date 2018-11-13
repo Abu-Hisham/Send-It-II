@@ -40,19 +40,24 @@ class SendItTestCase(unittest.TestCase):
     def test_get_a_single_parcel(self):
         self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
                          headers={'content-type': 'application/json'})
+        parcel = Parcel.parcel_list[0]
 
-        res = self.client.get('/api/v1/parcels/1',
+        res = self.client.get('/api/v1/parcels/' + str(parcel.parcel_id),
                               headers={'content-type': 'application/json'})
+        self.assertIn(parcel, Parcel.parcel_list)
+        self.assertIn(parcel.__repr__()['sender_name'], str(res.data))
         self.assertEqual(res.status_code, 200)
 
     def test_get_all_parcels(self):
-        self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+        parcel1 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
                          headers={'content-type': 'application/json'})
 
-        self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data2),
+        parcel2 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data2),
                          headers={'content-type': 'application/json'})
         res = self.client.get('/api/v1/parcels',
                               headers={'content-type': 'application/json'})
+        self.assertIn(parcel1.sender_name,res.data)
+        self.assertIn(parcel2.sender_name,res.data)
         self.assertEqual(res.status_code, 200)
 
     def test_cancel_delivery_order(self):
