@@ -2,7 +2,7 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class User (object):
+class User(object):
     user_list = []
 
     def __init__(self, username, email, phone, password):
@@ -45,22 +45,22 @@ class User (object):
         return user
 
     def __repr__(self):
-        return {'user_id':self.user_id,
+        return {'user_id': self.user_id,
                 'username': self.username,
-                'email':self.email,
-                'phone':self.phone,
-                'password_hash':self.password_hash
+                'email': self.email,
+                'phone': self.phone,
+                'password_hash': self.password_hash
                 }
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
 
-class Parcel (object):
+class Parcel(object):
     """"Class Description goes here"""
-    parcel_list=[]
+    parcel_list = []
 
-    def __init__(self, sender_name,sender_phone, sender_location, recipient_name, recipient_phone, recipient_location):
+    def __init__(self, sender_name, sender_phone, sender_location, recipient_name, recipient_phone, recipient_location):
         self.parcel_id = len(Parcel.parcel_list) + 1
         self.sender_name = sender_name
         self.sender_phone = sender_phone
@@ -71,26 +71,25 @@ class Parcel (object):
         self.status = "dispatched",
         self.date = datetime.now()
 
-
-    def changeStatus(self, new_status):
+    def change_status(self, new_status):
         self.status = new_status
         return self.status
 
-    def changeLocation(self, new_location):
+    def change_location(self, new_location):
         self.recipient_location = new_location
         return self.recipient_location
-    
+
     @staticmethod
-    def addParcel(parcel):
+    def add_parcel(parcel):
         Parcel.parcel_list.append(parcel)
 
     @staticmethod
-    def removeParcel(parcel_id):
+    def remove_parcel(parcel_id):
         parcel = Parcel.getParcel(parcel_id)
         Parcel.parcel_list.remove(parcel)
 
     @staticmethod
-    def getParcel(parcel_id):
+    def get_parcel(parcel_id):
         for parcel in Parcel.parcel_list:
             if parcel.parcel_id == parcel_id:
                 return parcel
@@ -119,13 +118,13 @@ class Parcel (object):
         return parcel
 
     def __repr__(self):
-        return {'parcel_id':self.parcel_id,
+        return {'parcel_id': self.parcel_id,
                 'sender_name': self.sender_name,
-                'sender_phone':self.sender_phone,
-                'sender_location':self.sender_location,
-                'recipient_name':self.recipient_name,
-                'recipient_phone':self.recipient_phone,
-                'recipient_location':self.recipient_location,
-                'parcel_status':self.status,
-                'date':str(self.date)
+                'sender_phone': self.sender_phone,
+                'sender_location': self.sender_location,
+                'recipient_name': self.recipient_name,
+                'recipient_phone': self.recipient_phone,
+                'recipient_location': self.recipient_location,
+                'parcel_status': self.status,
+                'date': str(self.date)
                 }

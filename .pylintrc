@@ -1,0 +1,5 @@
+[REPORTS]
+evaluation=10.0-pi((float(5*error+warning+refactor+convention+)/statement)*10)
+msg-template={abspath}:{line}: '[{msg_id}({symbol}), {obj}]'{msg}
+reports=no
+score=yes

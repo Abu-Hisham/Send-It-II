@@ -1,13 +1,16 @@
 from flask import Blueprint, request, jsonify
-from app.api.V1.models import Parcel,User
+from app.api.V1.models import Parcel, User
+
 bp = Blueprint('app', __name__, url_prefix='/api/v1')
+
+
 @bp.route('/')
 @bp.route('/index')
 def index():
-    return "Hello, World!"
+    return "Welcome to send it application!"
 
 
-@bp.route('/users',methods=['POST'])
+@bp.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json()
     username = data['username']
@@ -42,23 +45,23 @@ def create_parcel_delivery_order():
     recipient_phone = data['recipient_phone']
     recipient_location = data['recipient_location']
     parcel = Parcel(sender_name, sender_phone, sender_location, recipient_name, recipient_phone, recipient_location)
-    Parcel.addParcel(parcel)
+    Parcel.add_parcel(parcel)
     response = jsonify(parcel.__repr__())
     response.status_code = 201
     return response
 
 
-@bp.route('/parcels/<int:parcel_id>', methods = ['GET'])
+@bp.route('/parcels/<int:parcel_id>', methods=['GET'])
 def get_a_specific_parcel(parcel_id, **kwargs):
-    parcel = Parcel.getParcel(parcel_id)
+    parcel = Parcel.get_parcel(parcel_id)
     if parcel is not None:
         response = jsonify(parcel.__repr__())
         response.status_code = 200
         return response
     else:
         message = {
-                    'Error':"Parcel with the given ID was not found"
-                    }
+            'Error': "Parcel with the given ID was not found"
+        }
         response = jsonify(message)
         response.status_code = 404
         return response
@@ -78,13 +81,13 @@ def get_user_parcels(user_id, **kwargs):
         response.status_code = 200
         return response
     else:
-        message = {'error':"Not a valid user"}
+        message = {'error': "Not a valid user"}
         response = jsonify(message)
         response.status_code = 400
-        return  response
+        return response
 
 
-@bp.route('/parcels', methods = ['GET'])
+@bp.route('/parcels', methods=['GET'])
 def get_all_parcels():
     parcels = Parcel.parcel_list
     res = {}
@@ -107,6 +110,6 @@ def cancel_a_delivery_order(parcel_id, **kwargs):
         response.status_code = 200
         return response
     else:
-        response = jsonify({"error":"Resource not found"})
+        response = jsonify({"error": "Resource not found"})
         response.status_code = 404
         return response
