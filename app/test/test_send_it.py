@@ -84,6 +84,7 @@ class SendItTestCase(unittest.TestCase):
     def test_create_parcel_delivery_order(self):
         res = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
                                headers={'content-type': 'application/json'})
+        self.assertIn(self.parcel_data1['sender_name'], str(res.data))
         self.assertEqual(res.status_code, 201)
 
     def test_create_user(self):
