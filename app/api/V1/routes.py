@@ -17,22 +17,28 @@ def create_user():
     email = data['email']
     phone = data['phone']
     password = data['password']
+    data_error = User.validate_data(username, email, phone, password)
 
-    user = User(username, email, phone, password)
-    if user in User.user_list:
-        message = {'username': user.username,
-                   'status': 'User Exists'}
-        response = jsonify(message)
-        response.status_code = 300
-        return response
-    else:
-        User.user_list.append(user)
-        message = {'username': user.username,
-                   'status': 'User created successfully'
-                   }
-        response = jsonify(message)
-        response.status_code = 201
-        return response
+    if data_error == {}:
+        user = User(username, email, phone, password)
+        if user in User.user_list:
+            message = {'username': user.username,
+                       'status': 'User Exists'}
+            response = jsonify(message)
+            response.status_code = 400
+            return response
+        else:
+            User.user_list.append(user)
+            message = {'username': user.username,
+                       'status': 'User created successfully'
+                       }
+            response = jsonify(message)
+            response.status_code = 201
+            return response
+    message = {'error(s)': data_error}
+    response = jsonify(message)
+    response.status_code = 400
+    return response
 
 
 @bp.route('/parcels', methods=['POST'])
@@ -44,11 +50,18 @@ def create_parcel_delivery_order():
     recipient_name = data['recipient_name']
     recipient_phone = data['recipient_phone']
     recipient_location = data['recipient_location']
-    parcel = Parcel(sender_name, sender_phone, sender_location, recipient_name, recipient_phone, recipient_location)
-    Parcel.add_parcel(parcel)
-    response = jsonify(parcel.__repr__())
-    response.status_code = 201
-    return response
+    data_error = Parcel.validate_data(sender_name, sender_phone, sender_location, recipient_name, recipient_phone, recipient_location)
+    if data_error == {}:
+        parcel = Parcel(sender_name, sender_phone, sender_location, recipient_name, recipient_phone, recipient_location)
+        Parcel.add_parcel(parcel)
+        response = jsonify(parcel.__repr__())
+        response.status_code = 201
+        return response
+    else:
+        message = {'error(s)': data_error}
+        response = jsonify(message)
+        response.status_code = 400
+        return response
 
 
 @bp.route('/parcels/<int:parcel_id>', methods=['GET'])

@@ -87,11 +87,116 @@ class SendItTestCase(unittest.TestCase):
         self.assertIn(self.parcel_data1['sender_name'], str(res.data))
         self.assertEqual(res.status_code, 201)
 
+    def test_invalid_sender_or_recipient_name(self):
+        self.parcel_data1['sender_name'] = " "
+        res1 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                               headers={'content-type': 'application/json'})
+        self.parcel_data1['sender_name'] = "ABC"
+        res2 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                               headers={'content-type': 'application/json'})
+        self.parcel_data1['recipient_name'] = " "
+        res3 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                               headers={'content-type': 'application/json'})
+        self.parcel_data1['recipient_name'] = "ABC"
+        res4 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                               headers={'content-type': 'application/json'})
+
+        error_list = [res1, res2, res3, res4]
+        for res in error_list:
+            self.assertEqual(res.status_code, 400)
+            self.assertIn("error", str(res.data))
+
+    def test_invalid_sender_or_recipient_location(self):
+        self.parcel_data1['sender_location'] = " "
+        res1 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                                headers={'content-type': 'application/json'})
+        self.parcel_data1['sender_location'] = "ABC"
+        res2 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                                headers={'content-type': 'application/json'})
+        self.parcel_data1['recipient_location'] = " "
+        res3 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                                headers={'content-type': 'application/json'})
+        self.parcel_data1['recipient_location'] = "ABC"
+        res4 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                                headers={'content-type': 'application/json'})
+
+        error_list = [res1, res2, res3, res4]
+        for res in error_list:
+            self.assertEqual(res.status_code, 400)
+            self.assertIn("error", str(res.data))
+
+    def test_invalid_sender_or_recipient_phone(self):
+        self.parcel_data1['sender_phone'] = "0712"
+        res1 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                               headers={'content-type': 'application/json'})
+        self.parcel_data1['sender_phone'] = "07123456789"
+        res2 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                               headers={'content-type': 'application/json'})
+        self.parcel_data1['sender_phone'] = "abcd"
+        res3 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                               headers={'content-type': 'application/json'})
+        self.parcel_data1['recipient_phone'] = "07123456789"
+        res4 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                               headers={'content-type': 'application/json'})
+        self.parcel_data1['recipient_phone'] = "0712"
+        res5 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                               headers={'content-type': 'application/json'})
+        self.parcel_data1['recipient_phone'] = "abcd"
+        res6 = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
+                               headers={'content-type': 'application/json'})
+
+        error_list = [res1, res2, res3, res4, res5, res6]
+        for res in error_list:
+            self.assertEqual(res.status_code, 400)
+            self.assertIn("error", str(res.data))
+
     def test_create_user(self):
         res = self.client.post('/api/v1/users', data=json.dumps(self.user_data1),
                                headers={'content-type': 'application/json'})
         self.assertEqual(res.status_code, 201)
         self.assertIn(self.user_data1['username'], str(res.data))
+
+    def test_invalid_username_rejected(self):
+        self.user_data1['username'] = ""
+        res1 = self.client.post('/api/v1/users', data=json.dumps(self.user_data1),
+                               headers={'content-type': 'application/json'})
+        self.user_data1['username'] = "123456789"
+        res2 = self.client.post('/api/v1/users', data=json.dumps(self.user_data1),
+                               headers={'content-type': 'application/json'})
+        self.user_data1['username'] = "ABC"
+        res3 = self.client.post('/api/v1/users', data=json.dumps(self.user_data1),
+                               headers={'content-type': 'application/json'})
+        error_list = [res1, res2, res3]
+        for res in error_list:
+            self.assertEqual(res.status_code, 400)
+            self.assertIn("error", str(res.data))
+
+    def test_invalid_email_rejected(self):
+        self.user_data1['email'] = "andela.com"
+        res1 = self.client.post('/api/v1/users', data=json.dumps(self.user_data1),
+                               headers={'content-type': 'application/json'})
+        self.user_data1['email'] = "andela"
+        res2 = self.client.post('/api/v1/users', data=json.dumps(self.user_data1),
+                               headers={'content-type': 'application/json'})
+        self.user_data1['email'] = "andela@com"
+        res3 = self.client.post('/api/v1/users', data=json.dumps(self.user_data1),
+                               headers={'content-type': 'application/json'})
+        error_list = [res1, res2, res3]
+        for res in error_list:
+            self.assertEqual(res.status_code, 400)
+            self.assertIn("error", str(res.data))
+
+    def test_invalid_phone_rejected(self):
+        self.user_data1['phone'] = "0712"
+        res1 = self.client.post('/api/v1/users', data=json.dumps(self.user_data1),
+                               headers={'content-type': 'application/json'})
+        self.user_data1['phone'] = "07123456789"
+        res2 = self.client.post('/api/v1/users', data=json.dumps(self.user_data1),
+                               headers={'content-type': 'application/json'})
+        error_list = [res1, res2]
+        for res in error_list:
+            self.assertEqual(res.status_code, 400)
+            self.assertIn("error", str(res.data))
 
 
 if __name__ == "__main__":
