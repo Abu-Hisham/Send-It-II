@@ -3,14 +3,17 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(object):
+    """
+    User class, template for creating user object
+    """
     user_list = []
 
     def __init__(self, username, email, phone, password):
         """
-        :param username:
-        :param email:
-        :param phone:
-        :param password:
+        :param username: Username of the user
+        :param email:email of the user
+        :param phone:Contact of the user
+        :param password: Password of the user
         """
         self.user_id = len(User.user_list) + 1
         self.username = username
