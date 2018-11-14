@@ -103,7 +103,7 @@ def get_all_parcels():
 @bp.route('/parcels/<int:parcel_id>/cancel', methods=['PUT'])
 def cancel_a_delivery_order(parcel_id, **kwargs):
     data = request.get_json()
-    parcel = Parcel.getParcel(parcel_id)
+    parcel = Parcel.get_parcel(parcel_id)
     if parcel is not None:
         parcel.status = data['new_status']
         response = jsonify(parcel.__repr__())

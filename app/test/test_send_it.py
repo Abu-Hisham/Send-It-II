@@ -40,9 +40,12 @@ class SendItTestCase(unittest.TestCase):
     def test_get_a_single_parcel(self):
         self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
                          headers={'content-type': 'application/json'})
+        parcel = Parcel.parcel_list[0]
 
-        res = self.client.get('/api/v1/parcels/1',
+        res = self.client.get('/api/v1/parcels/' + str(parcel.parcel_id),
                               headers={'content-type': 'application/json'})
+        self.assertIn(parcel, Parcel.parcel_list)
+        self.assertIn(parcel.__repr__()['sender_name'], str(res.data))
         self.assertEqual(res.status_code, 200)
 
     def test_get_all_parcels(self):
@@ -53,19 +56,19 @@ class SendItTestCase(unittest.TestCase):
                          headers={'content-type': 'application/json'})
         res = self.client.get('/api/v1/parcels',
                               headers={'content-type': 'application/json'})
+        self.assertIn(self.parcel_data1['sender_name'],str(res.data))
+        self.assertIn(self.parcel_data2['sender_name'],str(res.data))
         self.assertEqual(res.status_code, 200)
 
     def test_cancel_delivery_order(self):
         self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data2),
                          headers={'content-type': 'application/json'})
         data = {'new_status': "cancelled"}
-        res = self.client.put('/api/v1/parcels/1/cancel', data=json.dumps(data),
+        res = self.client.put('/api/v1/parcels/' + str(Parcel.parcel_list[0].parcel_id) + '/cancel', data=json.dumps(data),
                               headers={'content-type': 'application/json'})
 
         self.assertEqual(res.status_code, 200)
-
-    def test_get_all_parcels(self):
-        pass
+        self.assertIn(data['new_status'], str(res.data))
 
     def test_fetch_parcel_delivery_orders_for_a_user(self):
         self.client.post('/api/v1/users', data=json.dumps(self.user_data1),
@@ -73,16 +76,15 @@ class SendItTestCase(unittest.TestCase):
         self.parcel_data1['sender_phone'] = self.user_data1['phone']
         self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
                          headers={'content-type': 'application/json'})
-        res = self.client.get('/api/v1/users/1/parcels',
+        res = self.client.get('/api/v1/users/' + str(User.user_list[0].user_id) + '/parcels',
                               headers={'content-type': 'application/json'})
+        self.assertIn(self.user_data1['phone'], str(res.data))
         self.assertEqual(res.status_code, 200)
-
-    def test_cancel_parcel_delivery_order(self):
-        pass
 
     def test_create_parcel_delivery_order(self):
         res = self.client.post('/api/v1/parcels', data=json.dumps(self.parcel_data1),
                                headers={'content-type': 'application/json'})
+        self.assertIn(self.parcel_data1['sender_name'], str(res.data))
         self.assertEqual(res.status_code, 201)
 
     def test_create_user(self):
