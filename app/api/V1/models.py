@@ -62,6 +62,38 @@ class User(object):
                 return user
         return None
 
+    @staticmethod
+    def validate_data(username, email, phone, password):
+        """
+        Class method to verify data received before creating an object
+
+        :param username: Username of the user
+        :param email:email of the user
+        :param phone:Contact of the user
+        :param password: Password of the user
+        :return: an Error Dict
+        """
+        error = {}
+        index = 1
+        at_index = email.find("@")
+        dot_index = email.find(".", at_index)
+        if username is None or len(username) <= 3:
+            error[index] = "Username too short"
+            index += 1
+        elif username.isdigit():
+            error[index] = "Username can't be a number"
+            index += 1
+        elif at_index == -1 or dot_index == -1:
+            error[index] = "Invalid email entry"
+            index += 1
+        elif phone.isdigit() != True or len(phone) != 10:
+            error[index] = "phone MUST be a number, and contains 10 digits"
+            index += 1
+        elif len(password) <= 6:
+            error[index] = "Weak password"
+            index += 1
+        return error
+
     def check_password(self, password):
         """
         Class method for verifying user password
@@ -188,6 +220,32 @@ class Parcel(object):
             if parcel.sender_phone == user_phone:
                 user_parcels.append(parcel)
         return user_parcels
+
+    @staticmethod
+    def validate_data(sender_name, sender_phone, sender_location, recipient_name, recipient_phone, recipient_location):
+        """
+        Class method to verify data recieved before creating an object
+
+        :param sender_name: Name of the sender
+        :param sender_phone: contact of the sender
+        :param sender_location: Location of the sender
+        :param recipient_name: Name of the recipient
+        :param recipient_phone: Contact of the recipient
+        :param recipient_location: location of the recipient
+        :return: an error Dict
+        """
+        error = {}
+        index = 1
+        if (sender_name is None or recipient_name is None ) or (len(sender_name) <= 3 or len(recipient_name) <= 3):
+            error[index] = "Name too short"
+            index += 1
+        elif (sender_location is None or recipient_location is None) or (len(sender_location) <= 3 or len(recipient_location) <= 3):
+            error[index] = "Location Name too short or unknown"
+            index += 1
+        elif (sender_phone.isdigit() != True or recipient_phone.isdigit() != True) or (len(sender_phone) != 10 or len(recipient_phone) != 10):
+            error[index] = "phone MUST be a number, and contains 10 digits"
+            index += 1
+        return error
 
     def __eq__(self, other):
         """
