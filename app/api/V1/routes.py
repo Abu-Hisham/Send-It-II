@@ -22,14 +22,14 @@ def create_user():
     if data_error == {}:
         user = User(username, email, phone, password)
         if user in User.user_list:
-            message = {'username': user.username,
+            message = {'user': user.username,
                        'status': 'User Exists'}
             response = jsonify(message)
             response.status_code = 400
             return response
         else:
             User.user_list.append(user)
-            message = {'username': user.username,
+            message = {'user': user.__repr__(),
                        'status': 'User created successfully'
                        }
             response = jsonify(message)
@@ -68,7 +68,9 @@ def create_parcel_delivery_order():
 def get_a_specific_parcel(parcel_id, **kwargs):
     parcel = Parcel.get_parcel(parcel_id)
     if parcel is not None:
-        response = jsonify(parcel.__repr__())
+        message = {"parcel": parcel.__repr__(),
+                   "status": "Successfully retrieved"}
+        response = jsonify(message)
         response.status_code = 200
         return response
     else:
@@ -90,7 +92,9 @@ def get_user_parcels(user_id, **kwargs):
         for parcel in parcels:
             res[index] = parcel.__repr__()
             index += 1
-        response = jsonify(res)
+        message = {"parcels": res,
+                   "status": "Successfully retrieved"}
+        response = jsonify(message)
         response.status_code = 200
         return response
     else:
@@ -108,7 +112,9 @@ def get_all_parcels():
     for parcel in parcels:
         res[index] = parcel.__repr__()
         index += 1
-    response = jsonify(res)
+    message = {"parcels": res,
+               "status": "Successfully retrieved"}
+    response = jsonify(message)
     response.status_code = 200
     return response
 
@@ -119,7 +125,9 @@ def cancel_a_delivery_order(parcel_id, **kwargs):
     parcel = Parcel.get_parcel(parcel_id)
     if parcel is not None:
         parcel.status = data['new_status']
-        response = jsonify(parcel.__repr__())
+        message = {"parcel": parcel.__repr__(),
+                   "status": "Successfully Updated"}
+        response = jsonify(message)
         response.status_code = 200
         return response
     else:
