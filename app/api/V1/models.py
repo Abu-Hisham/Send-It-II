@@ -80,18 +80,17 @@ class User(object):
         if username is None or len(username) <= 3:
             error[index] = "Username too short"
             index += 1
-        elif username.isdigit():
+        if username.isdigit():
             error[index] = "Username can't be a number"
             index += 1
-        elif at_index == -1 or dot_index == -1:
+        if at_index == -1 or dot_index == -1:
             error[index] = "Invalid email entry"
             index += 1
-        elif phone.isdigit() != True or len(phone) != 10:
+        if phone.isdigit() != True or len(phone) != 10:
             error[index] = "phone MUST be a number, and contains 10 digits"
             index += 1
-        elif len(password) <= 6:
+        if len(password) <= 6:
             error[index] = "Weak password"
-            index += 1
         return error
 
     def check_password(self, password):
@@ -236,13 +235,14 @@ class Parcel(object):
         """
         error = {}
         index = 1
-        if (sender_name is None or recipient_name is None ) or (len(sender_name) <= 3 or len(recipient_name) <= 3):
+        if ((sender_name is None or recipient_name is None ) or (len(sender_name) <= 3 or len(recipient_name) <= 3)) \
+                or (sender_name.isdigit() == True or recipient_name.isdigit == True):
             error[index] = "Name too short"
             index += 1
-        elif (sender_location is None or recipient_location is None) or (len(sender_location) <= 3 or len(recipient_location) <= 3):
+        if (sender_location is None or recipient_location is None) or (len(sender_location) <= 3 or len(recipient_location) <= 3):
             error[index] = "Location Name too short or unknown"
             index += 1
-        elif (sender_phone.isdigit() != True or recipient_phone.isdigit() != True) or (len(sender_phone) != 10 or len(recipient_phone) != 10):
+        if (sender_phone.isdigit() == False or recipient_phone.isdigit() == False) or (len(sender_phone) != 10 or len(recipient_phone) != 10):
             error[index] = "phone MUST be a number, and contains 10 digits"
             index += 1
         return error
